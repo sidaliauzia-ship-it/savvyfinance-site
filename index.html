@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SavvyFinance - Professional Financial Blog</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
     <style>
         * {
             margin: 0;
@@ -30,6 +31,26 @@
             padding: 0 1rem;
         }
         
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
         .header h1 {
             font-size: 3rem;
             margin-bottom: 0.5rem;
@@ -41,7 +62,14 @@
             margin-bottom: 1.5rem;
         }
         
-        .login-btn {
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
             background: white;
             color: #059669;
             border: none;
@@ -50,10 +78,24 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s;
         }
         
-        .login-btn:hover {
+        .btn:hover {
             background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #059669;
         }
         
         .hero {
@@ -149,21 +191,24 @@
         }
         
         .admin-info {
-            background: #dcfce7;
-            border: 1px solid #bbf7d0;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+            border: 2px solid #bbf7d0;
+            border-radius: 1rem;
+            padding: 2rem;
             margin: 2rem 0;
+            text-align: center;
         }
         
         .admin-info h3 {
             color: #15803d;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
         
         .credentials {
             color: #166534;
             font-weight: 600;
+            line-height: 1.8;
         }
         
         @media (max-width: 768px) {
@@ -178,6 +223,11 @@
             .articles-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -185,9 +235,15 @@
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <h1>💰 SavvyFinance</h1>
+            <div class="logo-section">
+                <div class="logo">💰</div>
+                <h1>SavvyFinance</h1>
+            </div>
             <p>Your Professional Financial Resource</p>
-            <button class="login-btn" onclick="testLogin()">Admin Login</button>
+            <div class="nav-buttons">
+                <button class="btn" onclick="testLogin()">🔐 Test Backend</button>
+                <a href="editor.html" class="btn btn-secondary">✍️ Editor Panel</a>
+            </div>
         </div>
     </header>
 
@@ -205,11 +261,12 @@
     <!-- Admin Info -->
     <div class="container">
         <div class="admin-info">
-            <h3>🔐 Admin Access Information</h3>
+            <h3>🎯 Panel de Administración</h3>
             <p class="credentials">
-                <strong>Email:</strong> hello@savvyfinance.com<br>
-                <strong>Password:</strong> SavvyFinance@!<br>
-                <strong>Admin Panel:</strong> /admin (Disponible cuando conectes el backend)
+                <strong>✍️ Editor de Artículos:</strong> <a href="editor.html" style="color: #059669;">Haz clic aquí para crear nuevos artículos</a><br>
+                <strong>🌐 Sitio Web:</strong> Completamente funcional y listo<br>
+                <strong>📊 Backend API:</strong> Conectado y operativo<br>
+                <strong>💰 AdSense Ready:</strong> Optimizado para monetización
             </p>
         </div>
     </div>
@@ -285,29 +342,35 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">💰</div>
+                <span style="font-size: 1.2rem; font-weight: bold;">SavvyFinance</span>
+            </div>
             <p>&copy; 2025 SavvyFinance. All rights reserved.</p>
             <p style="margin-top: 0.5rem; opacity: 0.8;">Professional Financial Blog | USA Market Focus</p>
         </div>
     </footer>
 
-   <script>
-function testLogin() {
-    fetch('https://savvyfinance-api-2025.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            email: 'hello@savvyfinance.com',
-            password: 'SavvyFinance@!'
-        })
-    })
-    .then(r => r.json())
-    .then(d => {
-        if(d.access_token) {
-            alert('✅ LOGIN EXITOSO!\nBackend conectado!\nToken: ' + d.access_token);
-        } else {
-            alert('❌ Error: ' + JSON.stringify(d));
+    <script>
+        function testLogin() {
+            fetch('https://savvyfinance-api-2025.onrender.com/api/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    email: 'hello@savvyfinance.com',
+                    password: 'SavvyFinance@!'
+                })
+            })
+            .then(r => r.json())
+            .then(d => {
+                if(d.access_token) {
+                    alert('✅ BACKEND CONECTADO!\n\n🔗 API funcionando correctamente\n💰 Token recibido: ' + d.access_token.substring(0, 20) + '...\n\n🎯 Tu sitio está 100% operativo!');
+                } else {
+                    alert('❌ Error: ' + JSON.stringify(d));
+                }
+            })
+            .catch(e => alert('❌ Error conexión: ' + e));
         }
-    })
-    .catch(e => alert('❌ Error conexión: ' + e));
-}
-</script>
+    </script>
+</body>
+</html>
