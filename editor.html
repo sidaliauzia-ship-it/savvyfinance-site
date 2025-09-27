@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SavvyFinance - Editor de Artículos</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #059669 0%, #2563eb 100%);
+            color: white;
+            padding: 1.5rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.2s;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .main {
+            padding: 2rem 0;
+        }
+        
+        .stats-bar {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #059669;
+        }
+        
+        .stat-label {
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+        
+        .editor-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+        
+        .editor-card, .articles-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #059669;
+        }
+        
+        .form-textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        .article-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 0;
+        }
+        
+        .article-item:last-child {
+            border-bottom: none;
+        }
+        
+        .article-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+        
+        .article-meta {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #dcfce7, #f0fdf4);
+            border: 2px solid #bbf7d0;
+            color: #15803d;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .article-actions {
+            margin-top: 0.5rem;
+        }
+        
+        .btn-small {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-small:hover {
+            background: #e5e7eb;
+        }
+        
+        .writing-tips {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .writing-tips h4 {
+            color: #0c4a6e;
+            margin-bottom: 0.5rem;
+        }
+        
+        .writing-tips ul {
+            color: #0369a1;
+            padding-left: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .editor-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">💰</div>
+                    <div class="logo-text">SavvyFinance - Editor</div>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="nav-link">🏠 Ver Sitio Web</a>
+                    <a href="#tips" class="nav-link">💡 Consejos SEO</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalArticles">6</div>
+                        <div class="stat-label">Total Artículos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="publishedToday">0</div>
+                        <div class="stat-label">Publicados Hoy</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalViews">8,660</div>
+                        <div class="stat-label">Total Visualizaciones</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="thisMonth">4</div>
+                        <div class="stat-label">Este Mes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="editor-grid">
+                <!-- Editor de Artículos -->
+                <div class="editor-card">
+                    <h2 class="card-title">✍️ Crear Nuevo Artículo Diario</h2>
+                    
+                    <div class="writing-tips">
+                        <h4>💡 Tips para Artículos Exitosos:</h4>
+                        <ul>
+                            <li>Usa palabras clave relacionadas con finanzas USA</li>
+                            <li>Títulos específicos con años (ej: "2025", "2024")</li>
+                            <li>Incluye números y estadísticas</li>
+                            <li>Escribe mínimo 800 palabras para SEO</li>
+                        </ul>
+                    </div>
+                    
+                    <div id="successMessage" style="display:none;"></div>
+                    
+                    <form id="articleForm">
+                        <div class="form-group">
+                            <label class="form-label" for="title">📝 Título del Artículo</label>
+                            <input 
+                                type="text" 
+                                id="title" 
+                                class="form-input" 
+                                placeholder="Ej: Las 10 Mejores Inversiones para Principiantes en 2025"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="category">📂 Categoría</label>
+                            <select id="category" class="form-select" required>
+                                <option value="">Selecciona una categoría</option>
+                                <option value="investing">💹 Inversión</option>
+                                <option value="retirement">🏖️ Jubilación</option>
+                                <option value="cryptocurrency">₿ Criptomonedas</option>
+                                <option value="budgeting">💰 Presupuesto</option>
+                                <option value="personal-finance">💳 Finanzas Personales</option>
+                                <option value="real-estate">🏠 Bienes Raíces</option>
+                                <option value="taxes">📊 Impuestos</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="excerpt">📋 Resumen del Artículo (SEO Description)</label>
+                            <input 
+                                type="text" 
+                                id="excerpt" 
+                                class="form-input" 
+                                placeholder="Descripción que aparecerá en Google y redes sociales (máx 160 caracteres)"
+                                maxlength="160"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="content">📄 Contenido del Artículo</label>
+                            <textarea 
+                                id="content" 
+                                class="form-textarea" 
+                                placeholder="Escribe tu artículo completo aquí...
+
+EJEMPLO DE ESTRUCTURA:
+
+# Título Principal
+
+## Introducción
+Explica de qué trata el artículo y por qué es importante.
+
+## Sección 1: Concepto Principal
+- Punto importante 1
+- Punto importante 2
+- Punto importante 3
+
+## Sección 2: Datos y Estadísticas
+Incluye números específicos y datos actuales.
+
+## Sección 3: Consejos Prácticos
+Pasos que el lector puede seguir inmediatamente.
+
+## Conclusión
+Resume los puntos clave y motiva a la acción.
+
+**Consejo:** Usa negritas para palabras clave importantes.
+*Cursiva* para énfasis."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary">
+                            🚀 Publicar Artículo Ahora
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Lista de Artículos -->
+                <div class="articles-card">
+                    <h2 class="card-title">📚 Mis Artículos Publicados</h2>
+                    
+                    <div id="articlesList">
+                        <div class="article-item">
+                            <div class="article-title">401(k) Rollover Guide 2025: How to Move Your Retirement Savings Without Penalties</div>
+                            <div class="article-meta">🏖️ Retirement • Hace 2 días • 1,250 vistas • 8 min lectura</div>
+                            <div class="article-actions">
+                                <button class="btn-small" onclick="editArticle(1)">✏️ Editar</button>
+                                <button class="btn-small" onclick="viewArticle(1)">👁️ Ver</button>
+                            </div>
+                        </div>
+
+                        <div class="article-item">
+                            <div class="article-title">S&P 500 Index Fund Investing: Complete Beginner's Guide</div>
+                            <div class="article-meta">💹 Investing • Hace 3 días • 2,100 vistas • 12 min lectura</div>
+                            <div class="article-actions">
+                                <button class="btn-small" onclick="editArticle(2)">✏️ Editar</button>
+                                <button class="btn-small" onclick="viewArticle(2)">👁️ Ver</button>
+                            </div>
+                        </div>
+
+                        <div class="article-item">
+                            <div class="article-title">Bitcoin vs Ethereum: Which Cryptocurrency Should You Buy in 2025?</div>
+                            <div class="article-meta">₿ Cryptocurrency • Hace 5 días • 1,850 vistas • 10 min lectura</div>
+                            <div class="article-actions">
+                                <button class="btn-small" onclick="editArticle(3)">✏️ Editar</button>
+                                <button class="btn-small" onclick="viewArticle(3)">👁️ Ver</button>
+                            </div>
+                        </div>
+
+                        <div class="article-item">
+                            <div class="article-title">Zero-Based Budgeting: How to Give Every Dollar a Job</div>
+                            <div class="article-meta">💰 Budgeting • Hace 1 semana • 1,420 vistas • 9 min lectura</div>
+                            <div class="article-actions">
+                                <button class="btn-small" onclick="editArticle(4)">✏️ Editar</button>
+                                <button class="btn-small" onclick="viewArticle(4)">👁️ Ver</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border-radius: 0.5rem;">
+                        <h4 style="color: #1f2937; margin-bottom: 0.5rem;">🎯 Ideas para Artículos:</h4>
+                        <ul style="font-size: 0.875rem; color: #6b7280;">
+                            <li>Mejores tarjetas de crédito 2025</li>
+                            <li>Cómo ahorrar $10,000 en un año</li>
+                            <li>Inversiones en bolsa para principiantes</li>
+                            <li>Planificación fiscal 2025</li>
+                            <li>Fondos de emergencia: guía completa</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Manejar envío del formulario
+        document.getElementById('articleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('category').value;
+            const excerpt = document.getElementById('excerpt').value;
+            const content = document.getElementById('content').value;
+            
+            // Validar contenido mínimo
+            if (content.length < 500) {
+                alert('⚠️ Tu artículo es muy corto. Para mejor SEO, escribe al menos 500 palabras.');
+                return;
+            }
+            
+            // Simular publicación exitosa
+            const successDiv = document.getElementById('successMessage');
+            successDiv.innerHTML = `
+                <div class="success-message">
+                    ✅ <strong>¡Artículo publicado exitosamente!</strong><br>
+                    <strong>"${title}"</strong> se ha añadido a tu sitio web.<br>
+                    📈 Optimizado para SEO y listo para AdSense.<br>
+                    🌐 Disponible en: <a href="index.html" target="_blank">Ver sitio web</a>
+                </div>
+            `;
+            successDiv.style.display = 'block';
+            
+            // Añadir a la lista
+            const articlesList = document.getElementById('articlesList');
+            const newArticle = document.createElement('div');
+            newArticle.className = 'article-item';
+            newArticle.innerHTML = `
+                <div class="article-title">${title}</div>
+                <div class="article-meta">${getCategoryIcon(category)} ${getCategoryName(category)} • Recién publicado • 0 vistas • ${Math.ceil(content.length / 200)} min lectura</div>
+                <div class="article-actions">
+                    <button class="btn-small" onclick="editArticle('new')">✏️ Editar</button>
+                    <button class="btn-small" onclick="viewArticle('new')">👁️ Ver</button>
+                </div>
+            `;
+            articlesList.insertBefore(newArticle, articlesList.firstChild);
+            
+            // Actualizar estadísticas
+            const totalArticles = document.getElementById('totalArticles');
+            const currentTotal = parseInt(totalArticles.textContent);
+            totalArticles.textContent = currentTotal + 1;
+            
+            const publishedToday = document.getElementById('publishedToday');
+            const currentToday = parseInt(publishedToday.textContent);
+            publishedToday.textContent = currentToday + 1;
+            
+            // Limpiar formulario
+            this.reset();
+            
+            // Scroll al top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Ocultar mensaje después de 8 segundos
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 8000);
+        });
+        
+        function getCategoryIcon(category) {
+            const icons = {
+                'investing': '💹',
+                'retirement': '🏖️',
+                'cryptocurrency': '₿',
+                'budgeting': '💰',
+                'personal-finance': '💳',
+                'real-estate': '🏠',
+                'taxes': '📊'
+            };
+            return icons[category] || '📄';
+        }
+        
+        function getCategoryName(category) {
+            const names = {
+                'investing': 'Investing',
+                'retirement': 'Retirement', 
+                'cryptocurrency': 'Cryptocurrency',
+                'budgeting': 'Budgeting',
+                'personal-finance': 'Personal Finance',
+                'real-estate': 'Real Estate',
+                'taxes': 'Taxes'
+            };
+            return names[category] || 'General';
+        }
+        
+        function editArticle(id) {
+            alert('✏️ Función de edición en desarrollo.\n\n💡 Por ahora puedes crear nuevos artículos.\n🔄 Próximamente: edición de artículos existentes.');
+        }
+        
+        function viewArticle(id) {
+            window.open('index.html', '_blank');
+        }
+
+        // Actualizar contador de caracteres en tiempo real
+        document.getElementById('excerpt').addEventListener('input', function() {
+            const remaining = 160 - this.value.length;
+            const label = this.previousElementSibling;
+            label.innerHTML = `📋 Resumen del Artículo (SEO Description) <span style="color: ${remaining < 20 ? 'red' : '#6b7280'};">${remaining} caracteres restantes</span>`;
+        });
+    </script>
+</body>
+</html>
